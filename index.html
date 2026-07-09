@@ -390,6 +390,19 @@
         image: "https://www.lovelive-anime.jp/lovelive/jp/news/2026/06/12/1002/W4MTTYtXRvUQ1bvD/kbWEwaNozapVgA75.jpeg"
       },
       {
+        id: 6,
+        work: "EVANGELION / RADIO EVA",
+        event: "RADIO EVA POP UP STORE @ KAWASAKI",
+        start: "2026-06-19", end: "2026-07-26",
+        hours: "09:00–21:00",
+        locations: [{ area: "川崎", venue: "TSUTAYA BOOKSTORE 川崎站前店 5F" }],
+        mode: "direct", modeText: "可直接買周邊",
+        warning: "可直接购买 RADIO EVA 商品；未注明入场券或餐饮条件。",
+        notes: ["每消费满 ¥5,000，随机赠原创贴纸 1 张（全 2 种）。", "赠品送完即止，图案不可选。"],
+        official: "https://www.eva-info.jp/26944",
+        image: "https://www.eva-info.jp/cab/wp-content/uploads/2026/06/df2d4ef2d2cf393eacf8ac43c8ef3cdb-1024x561.jpg"
+      },
+      {
         id: 7,
         work: "ご注文はうさぎですか？",
         event: "× ROUND1 聯名活動",
@@ -585,11 +598,13 @@
         locations: [
           { area: "池袋", venue: "WEGO 池袋 P'PARCO 店" },
           { area: "原宿", venue: "WEGO 1.3.5... 原宿店" },
+          { area: "橫濱", venue: "WEGO 橫濱 VIVRE 店" },
+          { area: "大宮", venue: "WEGO 大宮 ARCHE 店" },
           { area: "立川", venue: "WEGO Lalaport 立川立飛店" }
         ],
         mode: "conditional", modeText: "開始日起／售完為止",
         warning: "7/10 首日各店进行入场顺序抽选；之后可按一般商店方式购买，但结束日未公布，售完可能提前结束。",
-        notes: ["各商品有限购：服饰多为每图案 1 件，随机商品多为最多 5 个或每次结账 1 BOX。", "东京都内列出池袋、原宿与立川三店。"],
+        notes: ["各商品有限购：服饰多为每图案 1 件，随机商品多为最多 5 个或每次结账 1 BOX。", "东京可选池袋或原宿店，另有横滨、大宫、立川等店。"],
         official: "https://wego.jp/blogs/news/chou-kaguyahime-wego",
         image: "https://wego.jp/cdn/shop/articles/0617_kaguya_kv_NEWS_0479861c-9401-4a37-8a71-904346d9bacf.jpg?v=1783502235"
       },
@@ -608,7 +623,7 @@
       }
     ];
 
-    const areaOrder = ["池袋", "秋葉原", "新宿", "澀谷", "有樂町", "原宿", "台場", "吉祥寺", "立川"];
+    const areaOrder = ["池袋", "秋葉原", "新宿", "澀谷", "有樂町", "原宿", "台場", "吉祥寺", "立川", "大宮", "橫濱", "川崎"];
     const tripDates = Array.from({ length: 11 }, (_, i) => `2026-07-${String(20 + i).padStart(2, "0")}`);
     const weekdays = ["日", "一", "二", "三", "四", "五", "六"];
     const modeLabel = {

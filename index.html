@@ -68,7 +68,7 @@
     .toolbar-inner { width: min(100%, 780px); margin: auto; }
     .switch {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
       gap: 4px;
       padding: 4px;
       border-radius: 14px;
@@ -96,9 +96,9 @@
       background: #fff;
     }
     .search:focus, .date-input:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(102,89,217,.12); }
-    .date-tools { display: none; gap: 7px; margin-top: 8px; overflow-x: auto; scrollbar-width: none; }
-    .date-tools.show { display: flex; }
-    .quick-date {
+    .filter-tools { display: none; gap: 7px; margin-top: 8px; overflow-x: auto; scrollbar-width: none; }
+    .filter-tools.show { display: flex; }
+    .quick-filter {
       flex: 0 0 auto;
       padding: 7px 12px;
       border: 1px solid #d9d2c9;
@@ -106,7 +106,7 @@
       background: #fff;
       cursor: pointer;
     }
-    .quick-date.active { color: #fff; border-color: var(--purple); background: var(--purple); }
+    .quick-filter.active { color: #fff; border-color: var(--purple); background: var(--purple); }
     .shell { padding: 18px 14px 70px; }
     .summary {
       display: flex;
@@ -283,20 +283,22 @@
   <div class="toolbar">
     <div class="toolbar-inner">
       <div class="switch" role="tablist" aria-label="瀏覽方式">
-        <button id="areaBtn" class="active" type="button">📍 按區域</button>
+        <button id="completeBtn" class="active" type="button">📋 完整</button>
+        <button id="areaBtn" type="button">📍 按區域</button>
         <button id="dateBtn" type="button">📅 按日期</button>
       </div>
       <div class="filters">
         <input id="search" class="search" type="search" placeholder="搜尋作品、活動、店家…">
-        <input id="dateInput" class="date-input" type="date" min="2026-07-20" max="2026-07-30" value="2026-07-20" aria-label="選擇日期">
+        <input id="dateInput" class="date-input" type="date" min="2026-07-20" max="2026-07-30" value="2026-07-20" aria-label="選擇日期" hidden>
       </div>
-      <div id="dateTools" class="date-tools"></div>
+      <div id="areaTools" class="filter-tools"></div>
+      <div id="dateTools" class="filter-tools"></div>
     </div>
   </div>
 
   <main class="shell">
     <div class="summary">
-      <strong id="summaryTitle">按區域瀏覽</strong>
+      <strong id="summaryTitle">完整列表</strong>
       <span id="summaryMeta" hidden></span>
     </div>
     <div id="app"></div>
@@ -621,7 +623,8 @@
       conditional: "有入場／販售條件",
       reservation: "需預約或額外消費"
     };
-    let view = "area";
+    let view = "complete";
+    let selectedArea = areaOrder[0];
     const $ = (s) => document.querySelector(s);
     const esc = (s = "") => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;" }[c]));
     const fmt = (iso) => {
@@ -634,10 +637,14 @@
     const mapUrl = (venue) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue)}`;
     const searchable = (e, loc) => [e.work, e.event, e.warning, e.hours, loc.area, loc.venue, ...(e.notes || [])].join(" ").toLowerCase();
 
+    $("#areaTools").innerHTML = areaOrder.map((area, index) =>
+      `<button class="quick-filter quick-area${index === 0 ? " active" : ""}" data-area="${esc(area)}">${esc(area)}</button>`
+    ).join("");
+
     $("#dateTools").innerHTML = tripDates.map((iso, index) => {
       const day = Number(iso.slice(-2));
       const weekday = weekdays[new Date(`${iso}T12:00:00+09:00`).getDay()];
-      return `<button class="quick-date${index === 0 ? " active" : ""}" data-date="${iso}">7/${day}（${weekday}）</button>`;
+      return `<button class="quick-filter quick-date${index === 0 ? " active" : ""}" data-date="${iso}">7/${day}（${weekday}）</button>`;
     }).join("");
 
     function imageHtml(e) {
@@ -696,21 +703,28 @@
       }).join("");
     }
 
-    function renderArea(query) {
-      let html = "";
-      let shown = 0;
-      areaOrder.forEach(area => {
-        const rows = [];
-        events.forEach(e => e.locations.forEach(loc => {
-          if (loc.area === area && (!query || searchable(e, loc).includes(query))) rows.push({e, loc});
-        }));
-        if (!rows.length) return;
-        shown += rows.length;
-        html += `<section class="area-section"><h2 class="area-title">${esc(area)}</h2>${venueBlocks(rows)}</section>`;
-      });
-      $("#summaryTitle").textContent = "按區域瀏覽";
+    function renderComplete(query) {
+      const rows = [];
+      events.forEach(e => e.locations.forEach(loc => {
+        if (!query || searchable(e, loc).includes(query)) rows.push({e, loc});
+      }));
+      $("#summaryTitle").textContent = "完整列表";
       $("#summaryMeta").textContent = "";
-      return html || `<div class="empty">找不到符合的活動，換個關鍵字試試。</div>`;
+      return rows.length
+        ? venueBlocks(rows)
+        : `<div class="empty">找不到符合的活動，換個關鍵字試試。</div>`;
+    }
+
+    function renderArea(query) {
+      const rows = [];
+      events.forEach(e => e.locations.forEach(loc => {
+        if (loc.area === selectedArea && (!query || searchable(e, loc).includes(query))) rows.push({e, loc});
+      }));
+      $("#summaryTitle").textContent = `${selectedArea}的活動`;
+      $("#summaryMeta").textContent = "";
+      return rows.length
+        ? venueBlocks(rows)
+        : `<div class="empty">這個區域沒有符合條件的活動。</div>`;
     }
 
     function renderDate(query) {
@@ -740,31 +754,39 @@
 
     function render() {
       const query = $("#search").value.trim().toLowerCase();
-      $("#app").innerHTML = view === "area" ? renderArea(query) : renderDate(query);
+      $("#app").innerHTML =
+        view === "complete" ? renderComplete(query) :
+        view === "area" ? renderArea(query) :
+        renderDate(query);
       $(".quick-date.active")?.classList.remove("active");
       document.querySelector(`.quick-date[data-date="${$("#dateInput").value}"]`)?.classList.add("active");
+      $(".quick-area.active")?.classList.remove("active");
+      document.querySelector(`.quick-area[data-area="${selectedArea}"]`)?.classList.add("active");
     }
 
-    $("#areaBtn").addEventListener("click", () => {
-      view = "area";
-      $("#areaBtn").classList.add("active");
-      $("#dateBtn").classList.remove("active");
-      $("#dateTools").classList.remove("show");
+    function setView(nextView) {
+      view = nextView;
+      ["complete", "area", "date"].forEach(name =>
+        $(`#${name}Btn`).classList.toggle("active", name === view)
+      );
+      $("#areaTools").classList.toggle("show", view === "area");
+      $("#dateTools").classList.toggle("show", view === "date");
+      $("#dateInput").hidden = view !== "date";
       render();
-    });
-    $("#dateBtn").addEventListener("click", () => {
-      view = "date";
-      $("#dateBtn").classList.add("active");
-      $("#areaBtn").classList.remove("active");
-      $("#dateTools").classList.add("show");
-      render();
-    });
+    }
+
+    $("#completeBtn").addEventListener("click", () => setView("complete"));
+    $("#areaBtn").addEventListener("click", () => setView("area"));
+    $("#dateBtn").addEventListener("click", () => setView("date"));
     $("#search").addEventListener("input", render);
-    $("#dateInput").addEventListener("change", () => { view = "date"; $("#dateBtn").click(); });
+    $("#dateInput").addEventListener("change", () => setView("date"));
+    document.querySelectorAll(".quick-area").forEach(btn => btn.addEventListener("click", () => {
+      selectedArea = btn.dataset.area;
+      setView("area");
+    }));
     document.querySelectorAll(".quick-date").forEach(btn => btn.addEventListener("click", () => {
       $("#dateInput").value = btn.dataset.date;
-      view = "date";
-      $("#dateBtn").click();
+      setView("date");
     }));
     render();
   </script>

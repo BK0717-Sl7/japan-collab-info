@@ -287,7 +287,7 @@
       <p class="eyebrow">Japan Collab Info</p>
       <h1>日本联动资讯</h1>
       <div class="hero-meta">
-        <span>最後更新：2026/07/09</span>
+        <span>最後更新：2026/07/15</span>
       </div>
     </div>
   </header>
@@ -321,6 +321,68 @@
 
   <script>
     const events = [
+      {
+        id: 23,
+        work: "とある科学の超電磁砲T",
+        event: "FamilyMart 部分店鋪限定商品販售",
+        start: "2026-07-16", end: null,
+        hours: "7/16 10:00 起，依各店鋪販售時間",
+        completeOnly: true,
+        locations: [{ area: "全家提醒", venue: "FamilyMart 一部店鋪" }],
+        mode: "direct", modeText: "完整提醒",
+        warning: "全家到處都有，這筆只放在完整列表最上方提醒，不排進區域／日期。注意是 FamilyMart「一部店鋪」販售，店鋪可能不同時間開賣、售完即止。",
+        notes: ["官方写明店铺可能有不同发售日／销售开始时间。", "店铺不接受预约。", "请勿直接向店铺询问；可从官方页面的 PDF 查取扱店舗。"],
+        official: "https://www.beyonity.shop/html/20260716.html",
+        image: "https://gigaplus.makeshop.jp/beyonity/20260716/images/01.jpg"
+      },
+      {
+        id: 24,
+        work: "五等分の花嫁＊",
+        event: "五等分の花嫁＊ × ROUND1 コラボキャンペーン",
+        start: "2026-05-29", end: null,
+        hours: "2026/5/29 10:00 起，依 ROUND1 各店",
+        completeOnly: true,
+        locations: [{ area: "ROUND1提醒", venue: "ROUND1 各活動實施店鋪" }],
+        mode: "reservation", modeText: "官網需再確認",
+        warning: "ROUND1 官網最近不穩，先放完整列表提醒：活動 5/29 10:00 開始；部分內容原則預約制，可用 WEB／APP 預約。",
+        notes: ["官方页面标注原则预约制；特别联名房也原则预约制，未预约时段可利用到下一组预约前。", "俱乐部会员等折扣不适用。", "周边、特典与房间预约禁止营利目的购买、预约、转卖或无库存贩售；出发前请等官网恢复后再确认实施店铺与细项。"],
+        official: "https://www.round1.co.jp/collaboration/5hanayome2026/index.html",
+        image: "https://www.round1.co.jp/collaboration/5hanayome2026/img/01_top.jpg"
+      },
+      {
+        id: 25,
+        work: "Angel Beats!＆Charlotte",
+        event: "Angel Beats!＆Charlotte × BOOKOFF コラボ",
+        start: "2026-07-10", end: "2026-07-26",
+        hours: "依各分店營業時間",
+        locations: [
+          { area: "秋葉原", venue: "BOOKOFF 秋葉原駅前店" },
+          { area: "池袋", venue: "BOOKOFF 池袋サンシャイン60通り店" },
+          { area: "新宿", venue: "BOOKOFF PLUS 新宿駅西口店" },
+          { area: "立川", venue: "BOOKOFF SUPER BAZAAR 立川駅北口店" }
+        ],
+        mode: "direct", modeText: "挑幾家好走的店",
+        warning: "BOOKOFF 取扱店很多，这里只挑秋叶原、池袋、新宿、立川几家顺路店；店铺可能临时变更或发售时间不同。",
+        notes: ["期间：2026/7/10–7/26。", "商品为新作联名周边；购买特典以一会计为单位发放，无法合算。", "库存与发售时间依店铺不同，可能无预告变更。"],
+        official: "https://www.bookoff.co.jp/buy/anime/new_ltd_0048_abcl.html",
+        image: "https://www.bookoff.co.jp/buy/anime/images/0048_abcl_2026_00.jpg"
+      },
+      {
+        id: 26,
+        work: "BanG Dream!",
+        event: "BanG Dream! in R Baker コラボキャンペーン",
+        start: "2026-07-01", end: "2026-08-02",
+        hours: "立川 9:00–19:00／桜台 8:00–20:00",
+        locations: [
+          { area: "立川", venue: "R Baker 立川グリーンスプリングス店" },
+          { area: "桜台", venue: "R Baker Emio桜台店" }
+        ],
+        mode: "reservation", modeText: "須消費聯名餐飲",
+        warning: "不能只進店買周邊：官方注意事項寫明，周邊只限已購買／享用聯名菜單的客人購買。",
+        notes: ["每购买 1 品联名菜单，随机赠送 1 张原创杯垫；7/1–7/16 与 7/17–8/2 图案分前后半。", "联名面包每人每次会计合计最多 5 个；联名饮料最多 3 杯。", "店内利用原则上入店起 90 分钟；混杂时可能等待，订单数量也可能被限制。", "周边不接受事前预约或保留，部分商品可能售完。"],
+        official: "https://www.alcohol-inc.jp/media/cafe/bang-dream",
+        image: "https://www.alcohol-inc.jp/dcms_media/image/FIX_BanGD_KV_800.jpg"
+      },
       {
         id: 1,
         work: "魔法少女ノ魔女裁判",
@@ -624,7 +686,7 @@
       }
     ];
 
-    const areaOrder = ["池袋", "秋葉原", "新宿", "澀谷", "有樂町", "原宿", "台場", "吉祥寺", "立川", "大宮", "橫濱", "川崎"];
+    const areaOrder = ["池袋", "秋葉原", "新宿", "桜台", "澀谷", "有樂町", "原宿", "台場", "吉祥寺", "立川", "大宮", "橫濱", "川崎"];
     const tripDates = Array.from({ length: 11 }, (_, i) => `2026-07-${String(20 + i).padStart(2, "0")}`);
     const weekdays = ["日", "一", "二", "三", "四", "五", "六"];
     const modeLabel = {
@@ -762,7 +824,7 @@
 
     function renderArea(query) {
       const rows = [];
-      events.forEach(e => e.locations.forEach(loc => {
+      events.filter(e => !e.completeOnly).forEach(e => e.locations.forEach(loc => {
         if (loc.area === selectedArea && (!query || searchable(e, loc).includes(query))) rows.push({e, loc});
       }));
       $("#summaryTitle").textContent = `${selectedArea}的活動`;
@@ -775,7 +837,7 @@
     function renderDate(query) {
       const date = $("#dateInput").value;
       const rows = [];
-      events.filter(e => activeOn(e, date)).forEach(e => e.locations.forEach(loc => {
+      events.filter(e => !e.completeOnly && activeOn(e, date)).forEach(e => e.locations.forEach(loc => {
         if (!query || searchable(e, loc).includes(query)) rows.push({e, loc});
       }));
       rows.sort((a,b) =>
